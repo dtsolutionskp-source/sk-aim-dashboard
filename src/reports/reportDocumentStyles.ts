@@ -145,6 +145,109 @@ export const REPORT_DOCUMENT_STYLES = `
     margin-bottom: 6px;
   }
 
+  .summary-box {
+    margin-top: 10px;
+    padding: 14px 16px;
+    border: 1px solid #e2e5ea;
+    border-radius: 8px;
+    background: #f7f8fa;
+  }
+
+  .summary-box .summary-label {
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #6b7684;
+    margin-bottom: 8px;
+  }
+
+  .overview-text {
+    margin-top: 8px;
+    font-size: 10.5pt;
+    line-height: 1.75;
+    color: #4e5968;
+  }
+
+  .data-source {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-left: 3px solid #f47725;
+    background: #fcfcfd;
+    font-size: 9pt;
+    color: #6b7684;
+    line-height: 1.6;
+  }
+
+  .subsection-title {
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #333d4b;
+  }
+
+  .material-block {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed #e2e5ea;
+  }
+
+  .material-block:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .material-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .material-head h3 {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #191f28;
+  }
+
+  .material-head span {
+    font-size: 9pt;
+    color: #9aa3ad;
+    white-space: nowrap;
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .image-card {
+    border: 1px solid #e2e5ea;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .image-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 120px;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .image-caption {
+    padding: 6px 8px;
+    font-size: 8.5pt;
+    color: #6b7684;
+    text-align: center;
+    background: #f7f8fa;
+  }
+
   .doc-footer {
     margin-top: 32px;
     padding-top: 14px;

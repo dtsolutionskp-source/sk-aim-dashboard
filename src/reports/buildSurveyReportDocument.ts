@@ -4,6 +4,7 @@ import {
   surveyOverview,
   surveySectionSummaries,
 } from '../data/surveyReportData';
+import { festivalInfo } from '../data/mockData';
 import { escapeHtml, wrapReportHtml } from './reportDocumentStyles';
 
 const SURVEY_SECTIONS = [
@@ -111,8 +112,8 @@ export function buildSurveyReportDocument(): string {
     </div>
 
     <footer class="doc-footer">
-      <p>본 보고서는 SK AIM 플랫폼에 의해 자동 생성되었습니다.</p>
-      <p>SK AIM · 공공기관 통합 성과관리 플랫폼</p>
+      <p>${escapeHtml(festivalInfo.organizer)} · ${escapeHtml(surveyOverview.title)} 결과 보고서</p>
+      <p>데이터 출처: 현장 설문조사 · SK텔레콤 위치데이터(교차분석)</p>
     </footer>
   `;
 

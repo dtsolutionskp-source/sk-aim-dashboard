@@ -165,7 +165,7 @@ export function exportReportHwp({ filenameBase, slides, title }: ExportReportOpt
 export async function exportReportPpt({ filenameBase, slides, title }: ExportReportOptions) {
   const { default: PptxGenJS } = await import('pptxgenjs');
   const pptx = new PptxGenJS();
-  pptx.author = 'SK AIM';
+  pptx.author = '속초시청';
   pptx.title = title;
 
   const titleSlide = pptx.addSlide();
@@ -179,7 +179,7 @@ export async function exportReportPpt({ filenameBase, slides, title }: ExportRep
     color: '191F28',
     fontFace: 'Malgun Gothic',
   });
-  titleSlide.addText('SK AIM 자동 생성 보고서', {
+  titleSlide.addText('축제 성과 분석 보고서', {
     x: 0.6,
     y: 2.6,
     w: 8.8,
