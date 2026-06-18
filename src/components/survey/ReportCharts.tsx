@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Download, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Sparkles, ChevronRight, ArrowLeft } from 'lucide-react';
 import { ChartTooltip } from './ChartTooltip';
 import { TOTAL_RESPONDENTS, toCount } from '../../data/surveyReportData';
 import { saveSurveyScroll } from '../../utils/surveyScroll';
@@ -820,27 +820,6 @@ export function TagList({ items, variant }: { items: string[]; variant: 'positiv
         >
           {item}
         </span>
-      ))}
-    </div>
-  );
-}
-
-/* ── Download Bar ── */
-export function ReportDownloadBar() {
-  const formats = ['PDF', 'PPT', 'HWP'];
-  const handle = (f: string) =>
-    alert(`${f} 형식으로 설문조사 결과보고서 다운로드를 시작합니다.\n(데모 버전)`);
-  return (
-    <div className="flex flex-wrap gap-2">
-      {formats.map((f) => (
-        <button
-          key={f}
-          onClick={() => handle(f)}
-          className="flex items-center gap-1.5 rounded-lg border border-sk-gray-200 bg-white px-3.5 py-2 text-xs font-medium text-sk-gray-700 shadow-sm transition-all hover:border-sk-orange/30 hover:text-sk-orange"
-        >
-          <Download className="h-3.5 w-3.5" />
-          {f} 다운로드
-        </button>
       ))}
     </div>
   );

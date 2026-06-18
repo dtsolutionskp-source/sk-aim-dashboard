@@ -10,10 +10,10 @@ import {
   ProfileStackedChart,
   ScoreHighlight,
   TagList,
-  ReportDownloadBar,
   SubCard,
   DetailLink,
 } from '../components/survey/ReportCharts';
+import { ReportDownloadBar } from '../components/survey/ReportDownloadBar';
 import { FreeResponsePanel } from '../components/survey/FreeResponsePanel';
 import { NpsReasonKeywords } from '../components/survey/NpsReasonPanel';
 import {

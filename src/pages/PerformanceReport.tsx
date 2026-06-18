@@ -1,15 +1,23 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Download, FileText, CheckCircle2, Sparkles, Image } from 'lucide-react';
+import { Download, FileText, CheckCircle2, Sparkles, Image, Printer } from 'lucide-react';
 import { PageHeader, PageContent } from '../components/Layout';
 import { Card } from '../components/ui';
 import ReportPreview from '../components/ReportPreview';
 import { festivalInfo, reportSections, aiInsights } from '../data/mockData';
+import {
+  buildPerformanceReportDocument,
+  PERFORMANCE_REPORT_FILENAME_BASE,
+} from '../reports/buildPerformanceReportDocument';
+import { useReportExport } from '../utils/useReportExport';
+import type { ReportFormat } from '../types/report';
 
-const downloadFormats = [
+const downloadFormats: { label: string; sub: string; format: ReportFormat; icon?: 'print' }[] = [
   { label: 'PDF', sub: '다운로드', format: 'pdf' },
+  { label: '인쇄', sub: '바로 출력', format: 'print', icon: 'print' },
   { label: 'PPT', sub: '다운로드', format: 'ppt' },
   { label: 'Word', sub: '다운로드', format: 'docx' },
-  { label: 'HWP', sub: '다운로드', format: 'hwp' },
+  { label: 'HWP', sub: 'RTF 저장', format: 'hwp' },
 ];
 
 const attachImages = [
@@ -18,9 +26,15 @@ const attachImages = [
 ];
 
 export default function PerformanceReport() {
-  const handleDownload = (format: string) => {
-    alert(`${format.toUpperCase()} 형식으로 보고서 다운로드를 시작합니다.\n(데모 버전에서는 실제 파일이 생성되지 않습니다.)`);
-  };
+  const reportTitle = useMemo(
+    () => `${festivalInfo.name} 성과 분석 보고서`,
+    [],
+  );
+  const { exporting, handleExport } = useReportExport({
+    buildHtml: buildPerformanceReportDocument,
+    filenameBase: PERFORMANCE_REPORT_FILENAME_BASE,
+    title: reportTitle,
+  });
 
   return (
     <>
@@ -55,27 +69,34 @@ export default function PerformanceReport() {
         </motion.div>
 
         {/* Download buttons */}
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {downloadFormats.map((dl, i) => (
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {downloadFormats.map((dl, i) => {
+            const isLoading = exporting === dl.format;
+            const Icon = dl.icon === 'print' ? Printer : Download;
+            return (
             <motion.button
               key={dl.format}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleDownload(dl.format)}
-              className="group flex flex-col items-center gap-2 rounded-2xl border border-sk-gray-200/80 bg-white px-4 py-5 shadow-card transition-all hover:border-sk-orange/25 hover:shadow-card-hover"
+              whileHover={{ y: exporting ? 0 : -2 }}
+              whileTap={{ scale: exporting ? 1 : 0.98 }}
+              disabled={Boolean(exporting)}
+              onClick={() => handleExport(dl.format)}
+              className="group flex flex-col items-center gap-2 rounded-2xl border border-sk-gray-200/80 bg-white px-4 py-5 shadow-card transition-all hover:border-sk-orange/25 hover:shadow-card-hover disabled:cursor-wait disabled:opacity-60"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sk-gray-25 text-sk-gray-600 transition-colors group-hover:gradient-sk group-hover:text-white">
-                <Download className="h-4 w-4" />
+                <Icon className="h-4 w-4" />
               </div>
               <div className="text-center">
-                <p className="text-sm font-bold text-sk-gray-800">{dl.label}</p>
+                <p className="text-sm font-bold text-sk-gray-800">
+                  {isLoading ? '생성 중…' : dl.label}
+                </p>
                 <p className="text-[11px] text-sk-gray-400">{dl.sub}</p>
               </div>
             </motion.button>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-6 grid gap-5 lg:grid-cols-3 lg:gap-6">
