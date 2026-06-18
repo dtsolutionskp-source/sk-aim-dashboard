@@ -1,19 +1,34 @@
 @import "tailwindcss";
 
 @theme {
+  --color-sk-red: #ea002c;
+  --color-sk-red-light: #fff0f3;
   --color-sk-orange: #f47725;
-  --color-sk-orange-light: #fff4ed;
+  --color-sk-orange-light: #fff6f0;
   --color-sk-orange-dark: #d9651a;
-  --color-sk-gray-50: #f8f9fa;
-  --color-sk-gray-100: #f1f3f5;
-  --color-sk-gray-200: #e9ecef;
-  --color-sk-gray-300: #dee2e6;
-  --color-sk-gray-400: #adb5bd;
-  --color-sk-gray-500: #868e96;
-  --color-sk-gray-600: #495057;
-  --color-sk-gray-700: #343a40;
-  --color-sk-gray-800: #212529;
+  --color-sk-gray-25: #fcfcfd;
+  --color-sk-gray-50: #f7f8fa;
+  --color-sk-gray-100: #eef0f3;
+  --color-sk-gray-200: #e2e5ea;
+  --color-sk-gray-300: #cdd2d9;
+  --color-sk-gray-400: #9aa3ad;
+  --color-sk-gray-500: #6b7684;
+  --color-sk-gray-600: #4e5968;
+  --color-sk-gray-700: #333d4b;
+  --color-sk-gray-800: #191f28;
+  --color-sk-gray-900: #0d1117;
   --font-sans: "Noto Sans KR", system-ui, sans-serif;
+  --shadow-card: 0 1px 2px rgba(25, 31, 40, 0.04), 0 4px 16px rgba(25, 31, 40, 0.06);
+  --shadow-card-hover: 0 2px 4px rgba(25, 31, 40, 0.06), 0 8px 24px rgba(25, 31, 40, 0.1);
+  --shadow-elevated: 0 8px 32px rgba(25, 31, 40, 0.12), 0 2px 8px rgba(25, 31, 40, 0.06);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -21,4 +36,30 @@ body {
   background-color: var(--color-sk-gray-50);
   color: var(--color-sk-gray-800);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-sk-orange) 20%, transparent);
+}
+
+@layer utilities {
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .gradient-sk {
+    background: linear-gradient(135deg, var(--color-sk-orange) 0%, var(--color-sk-red) 100%);
+  }
+  .gradient-sk-subtle {
+    background: linear-gradient(135deg, var(--color-sk-orange-light) 0%, #fff 60%);
+  }
 }

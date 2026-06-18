@@ -1,19 +1,27 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 import { PageHeader, PageContent } from '../components/Layout';
-import KpiCard, { Card, ProgressItem, RankList } from '../components/ui';
+import KpiCard, { Card, RankList, SectionLabel, StatBox } from '../components/ui';
+import { CustomerProfileView } from '../components/CustomerProfile';
+import { ProfileStackedChart } from '../components/survey/ReportCharts';
 import {
-  visitorDemographics,
   topInflowRegions,
   stayTimeAnalysis,
-  gridZones,
-  beforeVisitPlaces,
-  afterVisitPlaces,
-  economicImpact,
+  movementAnalysis,
+  TOTAL_VISITORS,
 } from '../data/mockData';
+import { topSegmentsByRank } from '../data/segmentData';
+import { defaultVisitorProfile } from '../data/customerProfiles';
+
+const kpiItems = [
+  { label: '총 방문객', value: TOTAL_VISITORS, unit: '명', change: 18, highlight: true },
+  { label: '평균 체류시간', value: 3.2, unit: '시간', change: 5 },
+  { label: '수도권 유입', value: 52, unit: '%', change: 3 },
+  { label: '추가 소비율', value: 68, unit: '%', change: 7 },
+];
 
 export default function DataAnalysis() {
-  const [selectedZone, setSelectedZone] = useState(gridZones[4]);
-
+  const navigate = useNavigate();
   const totalVisitors = topInflowRegions.reduce((sum, r) => sum + r.count, 0);
 
   return (
@@ -24,161 +32,135 @@ export default function DataAnalysis() {
         breadcrumb="데이터 분석"
       />
       <PageContent>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <KpiCard label="총 방문객" value={23060} unit="명" change={18} changeLabel="전년 대비" highlight />
-          <KpiCard label="평균 체류시간" value={3.2} unit="시간" change={5} changeLabel="전년 대비" />
-          <KpiCard label="수도권 유입" value={52} unit="%" change={3} changeLabel="전년 대비" />
-          <KpiCard label="추가 소비율" value={68} unit="%" change={7} changeLabel="전년 대비" />
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+          {kpiItems.map((kpi, i) => (
+            <KpiCard key={kpi.label} {...kpi} index={i} />
+          ))}
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <Card title="방문객 특성" subtitle="성별 · 연령 · 거주지 · 관심사">
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-sk-gray-400">성별</p>
-                <div className="space-y-3">
-                  {visitorDemographics.gender.map((g) => (
-                    <ProgressItem key={g.label} label={g.label} value={g.value} count={g.count} />
-                  ))}
-                </div>
+        <div className="mt-6">
+          <Card
+            title="방문객 프로필"
+            subtitle={defaultVisitorProfile.subtitle}
+            variant="elevated"
+          >
+            <CustomerProfileView profile={defaultVisitorProfile} />
+          </Card>
+        </div>
+
+        <div className="mt-6 grid gap-5 lg:grid-cols-2 lg:gap-6">
+          <Card title="관심사 순위" subtitle="축제 방문객 점유율 상위">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-3 text-[10px] text-sk-gray-400">
+                <span className="flex items-center gap-1"><span className="h-1.5 w-3 rounded-sm bg-sk-gray-300" />일반</span>
+                <span className="flex items-center gap-1"><span className="h-1.5 w-3 rounded-sm gradient-sk" />방문객</span>
               </div>
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-sk-gray-400">연령</p>
-                <div className="space-y-3">
-                  {visitorDemographics.age.map((a) => (
-                    <ProgressItem key={a.label} label={a.label} value={a.value} color="bg-orange-400" />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-sk-gray-400">거주지</p>
-                <div className="space-y-3">
-                  {visitorDemographics.residence.map((r) => (
-                    <ProgressItem key={r.label} label={r.label} value={r.value} color="bg-amber-500" />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-sk-gray-400">관심사</p>
-                <div className="space-y-3">
-                  {visitorDemographics.interests.map((i) => (
-                    <ProgressItem key={i.label} label={i.label} value={i.value} color="bg-yellow-500" />
-                  ))}
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/data-analysis/interests')}
+                className="flex items-center gap-0.5 text-xs font-semibold text-sk-orange hover:underline"
+              >
+                전체 보기
+                <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {topSegmentsByRank.slice(0, 6).map((s, idx) => {
+                const max = 85;
+                return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => navigate('/data-analysis/interests')}
+                  className="flex w-full items-center gap-3 rounded-xl border border-sk-gray-100 bg-sk-gray-25/50 px-3 py-2.5 text-left transition-colors hover:border-sk-orange/20 hover:bg-sk-orange-light/20"
+                >
+                  <span
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold ${
+                      idx < 3 ? 'gradient-sk text-white' : 'bg-sk-gray-100 text-sk-gray-500'
+                    }`}
+                  >
+                    {idx + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="truncate text-sm font-medium text-sk-gray-800">{s.label}</span>
+                      <span className="shrink-0 text-xs font-semibold text-sk-orange">{s.targetPct}%</span>
+                    </div>
+                    <div className="mt-1.5 space-y-1">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-sk-gray-100">
+                        <div
+                          className="h-full rounded-full bg-sk-gray-300"
+                          style={{ width: `${(s.benchmarkPct / max) * 100}%` }}
+                        />
+                      </div>
+                      <div className="h-2 w-full overflow-hidden rounded-full bg-sk-gray-100">
+                        <div
+                          className="h-full rounded-full gradient-sk"
+                          style={{ width: `${(s.targetPct / max) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </button>
+                );
+              })}
             </div>
           </Card>
 
-          <Card title="방문객 유입 지역 TOP 10" subtitle={`총 ${totalVisitors.toLocaleString()}명 분석`}>
+          <Card title="방문객 유입 지역 TOP 10" subtitle={`총 ${totalVisitors.toLocaleString()}명 · 지역 클릭 시 연령·성별`}>
             <RankList
               items={topInflowRegions.map((r) => ({
                 rank: r.rank,
                 label: r.city,
                 value: r.count,
                 pct: r.pct,
+                slug: r.slug,
               }))}
+              onItemClick={(item) => {
+                if (item.slug) navigate(`/data-analysis/region/${item.slug}`);
+              }}
             />
           </Card>
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <div className="mt-6">
           <Card title="체류시간 분석">
-            <div className="grid grid-cols-2 gap-4">
-              {stayTimeAnalysis.map((item) => (
-                <div key={item.label} className="rounded-lg border border-sk-gray-100 bg-sk-gray-50 p-4 text-center">
-                  <p className="text-2xl font-bold text-sk-orange">{item.value}%</p>
-                  <p className="mt-1 text-sm font-medium text-sk-gray-700">{item.label}</p>
-                  <p className="text-xs text-sk-gray-400">{item.count.toLocaleString()}명</p>
-                </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {stayTimeAnalysis.map((item, i) => (
+                <StatBox
+                  key={item.label}
+                  label={item.label}
+                  value={`${item.value}%`}
+                  sub={`${item.count.toLocaleString()}명`}
+                  highlight={i === 1}
+                />
               ))}
-            </div>
-          </Card>
-
-          <Card title="항공뷰 기반 공간 분석" subtitle="구역 클릭 시 상세 정보 표시">
-            <div className="grid grid-cols-3 gap-2">
-              {gridZones.map((zone) => (
-                <button
-                  key={zone.id}
-                  onClick={() => setSelectedZone(zone)}
-                  className={`relative rounded-lg border-2 p-4 text-center transition-all ${
-                    selectedZone.id === zone.id
-                      ? 'border-sk-orange bg-sk-orange-light'
-                      : 'border-sk-gray-200 bg-sk-gray-50 hover:border-sk-orange/50'
-                  }`}
-                  style={{
-                    backgroundColor:
-                      selectedZone.id === zone.id
-                        ? undefined
-                        : `rgba(244, 119, 37, ${0.1 + (zone.visitors / 5000) * 0.4})`,
-                  }}
-                >
-                  <span className="text-lg font-bold text-sk-gray-800">{zone.id}</span>
-                  <p className="mt-1 text-xs text-sk-gray-500">{zone.visitors.toLocaleString()}명</p>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-4 rounded-lg border border-sk-orange/20 bg-sk-orange-light/50 p-4">
-              <p className="text-sm font-semibold text-sk-orange">{selectedZone.id} 구역 상세</p>
-              <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <p className="text-sk-gray-500">방문객 수</p>
-                  <p className="font-bold text-sk-gray-800">{selectedZone.visitors.toLocaleString()}명</p>
-                </div>
-                <div>
-                  <p className="text-sk-gray-500">평균 체류시간</p>
-                  <p className="font-bold text-sk-gray-800">{selectedZone.avgStay}분</p>
-                </div>
-                <div>
-                  <p className="text-sk-gray-500">성별</p>
-                  <p className="font-bold text-sk-gray-800">
-                    여 {selectedZone.gender.female}% / 남 {selectedZone.gender.male}%
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sk-gray-500">주요 연령</p>
-                  <p className="font-bold text-sk-gray-800">{selectedZone.age}</p>
-                </div>
-              </div>
             </div>
           </Card>
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          <Card title="방문 전 방문 장소">
-            <div className="space-y-3">
-              {beforeVisitPlaces.map((p) => (
-                <ProgressItem key={p.label} label={p.label} value={p.value} />
-              ))}
-            </div>
-          </Card>
-
-          <Card title="방문 후 이동 장소">
-            <div className="space-y-3">
-              {afterVisitPlaces.map((p) => (
-                <ProgressItem key={p.label} label={p.label} value={p.value} color="bg-orange-400" />
-              ))}
-            </div>
-          </Card>
-
-          <Card title="지역경제 연계 분석" subtitle="축제 방문 후 소비처">
-            <div className="space-y-4">
-              {economicImpact.map((item) => (
-                <div key={item.label}>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-sk-gray-700">{item.label}</span>
-                    <span className="text-sk-gray-600">
-                      {(item.amount / 100000000).toFixed(1)}억원
-                    </span>
-                  </div>
-                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-sk-gray-100">
-                    <div className="h-full rounded-full bg-sk-orange" style={{ width: `${item.pct}%` }} />
-                  </div>
-                </div>
-              ))}
-              <div className="mt-2 rounded-lg bg-sk-gray-50 p-3 text-center">
-                <p className="text-xs text-sk-gray-500">총 경제 파급효과</p>
-                <p className="text-xl font-bold text-sk-orange">12.3억원</p>
+        <div className="mt-6">
+          <Card title="방문 전·후 이동" subtitle="막대 내 성별 · 하단 연령 분포">
+            <div className="grid gap-8 lg:grid-cols-2">
+              <div>
+                <SectionLabel>방문 전</SectionLabel>
+                <ProfileStackedChart
+                  items={movementAnalysis.before.items}
+                  series={movementAnalysis.before.series}
+                  genderSeries={movementAnalysis.before.genderSeries}
+                  genderInBar
+                  total={TOTAL_VISITORS}
+                />
+              </div>
+              <div>
+                <SectionLabel>방문 후</SectionLabel>
+                <ProfileStackedChart
+                  items={movementAnalysis.after.items}
+                  series={movementAnalysis.after.series}
+                  genderSeries={movementAnalysis.after.genderSeries}
+                  genderInBar
+                  total={TOTAL_VISITORS}
+                />
               </div>
             </div>
           </Card>

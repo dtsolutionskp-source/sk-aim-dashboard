@@ -1,3 +1,8 @@
+import { defaultVisitorProfile } from './customerProfiles';
+import { SK_AGE_BRACKETS } from '../types/customerProfile';
+
+export const TOTAL_VISITORS = 23060;
+
 export const festivalInfo = {
   name: '해오름 야간문화축제',
   period: '2025.10.01 ~ 2025.10.05',
@@ -9,41 +14,117 @@ export const marketingKpis = {
   pushSent: 125000,
   reached: 98200,
   clicks: 14730,
-  ctr: 15.0,
-  conversionRate: 8.2,
+  clickRate: 15.0,
 };
 
+export const targetAudienceSize = 150879;
+
 export const targetSegments = [
-  { label: '30~40대 여성', active: true },
-  { label: '가족 단위', active: true },
-  { label: '수도권 거주', active: true },
-  { label: '여행/관광 관심 고객', active: true },
+  {
+    label: '2050 여성',
+    active: true,
+    tooltip: 'SK 연령 데이터 기반',
+  },
+  {
+    label: '가족단위',
+    active: true,
+    tooltip: '기혼/키즈 App 다회 이용 고객/방문 목적지 중 유치원,초등학교 다회 방문 고객',
+  },
+  {
+    label: '수도권거주',
+    active: true,
+    tooltip: 'SK 위치데이터 기반 거주지 및 근무지 수도권 고객',
+  },
+  {
+    label: '여행/관광 관심 고객',
+    active: true,
+    tooltip: '여행 서비스 App 다회 이용 고객',
+  },
 ];
 
-export const promoMaterials = [
+export type PromoMaterialId = 'promo-push' | 'survey-push' | 'main-banner';
+
+export interface MaterialKpi {
+  label: string;
+  value: number;
+  unit: string;
+  change?: number;
+  changeLabel?: string;
+  highlight?: boolean;
+  decimals?: number;
+}
+
+export interface PromoMaterial {
+  id: PromoMaterialId;
+  title: string;
+  description: string;
+  stats: { sent: number; clicks: number; impressions?: number };
+  kpis: MaterialKpi[];
+  schedule: { type: 'send' | 'exposure'; label: string; period: string };
+  previews: {
+    label: string;
+    image: string;
+    type: 'notification' | 'banner' | 'flyer' | 'app';
+  }[];
+}
+
+export const surveyLocationSetting = {
+  mapImage: '/marketing/haeoreum-map.png',
+  scope: '해오름시 중앙공원 일대 · 반경 500m',
+  target: 'Geofence 내 축제 방문 고객',
+  estimatedReach: 12450,
+};
+
+export const promoMaterials: PromoMaterial[] = [
   {
-    id: 1,
-    title: '축제 홍보 푸쉬',
-    type: 'push',
-    description: '해오름 야간문화축제 개막 안내',
-    gradient: 'from-orange-400 to-red-500',
+    id: 'promo-push',
+    title: '홍보 푸쉬',
+    description: '2026 야간문화 축제 홍보 푸쉬',
     stats: { sent: 85000, clicks: 10200 },
+    schedule: { type: 'send', label: '발송일', period: '2025.09.28' },
+    kpis: [
+      { label: '푸쉬 발송 수', value: 85000, unit: '건', change: 12, changeLabel: '전년 대비' },
+      { label: '도달 고객 수', value: 72800, unit: '명', change: 9, changeLabel: '전년 대비' },
+      { label: '클릭 수', value: 10200, unit: '건', change: 18, changeLabel: '전년 대비' },
+      { label: '클릭율', value: 12.0, unit: '%', change: 2.1, changeLabel: '전년 대비', highlight: true, decimals: 1 },
+    ],
+    previews: [
+      { label: '푸쉬 알림 화면', image: '/marketing/promo-push-notification.png', type: 'notification' },
+      { label: '푸쉬 이미지', image: '/marketing/promo-push-banner.png', type: 'banner' },
+    ],
   },
   {
-    id: 2,
+    id: 'survey-push',
     title: '설문 참여 푸쉬',
-    type: 'push',
-    description: '방문 후 설문 참여 독려',
-    gradient: 'from-amber-400 to-orange-500',
+    description: '방문 후 설문 참여 독려 푸쉬',
     stats: { sent: 40000, clicks: 4530 },
+    schedule: { type: 'send', label: '발송일', period: '2025.10.02 ~ 2025.10.05' },
+    kpis: [
+      { label: '푸쉬 발송 수', value: 40000, unit: '건', change: 8, changeLabel: '전년 대비' },
+      { label: '도달 고객 수', value: 33600, unit: '명', change: 6, changeLabel: '전년 대비' },
+      { label: '클릭 수', value: 4530, unit: '건', change: 15, changeLabel: '전년 대비' },
+      { label: '클릭율', value: 11.3, unit: '%', change: 1.8, changeLabel: '전년 대비', highlight: true, decimals: 1 },
+    ],
+    previews: [
+      { label: '푸쉬 알림 화면', image: '/marketing/survey-push-notification.png', type: 'notification' },
+      { label: '푸쉬 이미지', image: '/marketing/survey-push-banner.png', type: 'banner' },
+    ],
   },
   {
-    id: 3,
+    id: 'main-banner',
     title: '메인 배너',
-    type: 'banner',
-    description: 'T map 앱 메인 배너 노출',
-    gradient: 'from-sky-400 to-blue-500',
-    stats: { sent: 0, clicks: 0, impressions: 245000 },
+    description: '모바일 전단지 및 앱 배너 노출',
+    stats: { sent: 0, clicks: 42800, impressions: 892000 },
+    schedule: { type: 'exposure', label: '노출 기간', period: '2025.09.20 ~ 2025.10.10' },
+    kpis: [
+      { label: '노출수', value: 892000, unit: '건', change: 32, changeLabel: '전년 대비' },
+      { label: '클릭수', value: 42800, unit: '건', change: 18, changeLabel: '전년 대비' },
+      { label: '클릭율', value: 4.8, unit: '%', change: 0.6, changeLabel: '전년 대비', highlight: true, decimals: 1 },
+    ],
+    previews: [
+      { label: '모바일 전단지', image: '/marketing/main-banner-flyer.png', type: 'flyer' },
+      { label: '앱 화면', image: '/marketing/main-banner-app.png', type: 'app' },
+    ],
   },
 ];
 
@@ -57,58 +138,55 @@ export const regionalResponse = [
 ];
 
 export const visitorDemographics = {
-  gender: [
-    { label: '여성', value: 58, count: 13386 },
-    { label: '남성', value: 42, count: 9674 },
-  ],
-  age: [
-    { label: '20대', value: 18 },
-    { label: '30대', value: 32 },
-    { label: '40대', value: 28 },
-    { label: '50대', value: 15 },
-    { label: '60대+', value: 7 },
-  ],
-  residence: [
-    { label: '수도권', value: 52 },
-    { label: '강원', value: 28 },
-    { label: '충청', value: 12 },
-    { label: '기타', value: 8 },
-  ],
-  interests: [
-    { label: '관광/여행', value: 45 },
-    { label: '음식/맛집', value: 28 },
-    { label: '문화/공연', value: 18 },
-    { label: '가족/육아', value: 9 },
-  ],
+  gender: defaultVisitorProfile.gender,
+  age: defaultVisitorProfile.age,
+  residence: defaultVisitorProfile.residence!,
+  interests: defaultVisitorProfile.interests!,
 };
 
+function regionAge(seed: number) {
+  const base = [6, 4, 6, 11, 13, 15, 14, 11, 9, 11];
+  return SK_AGE_BRACKETS.map((label, i) => ({
+    label,
+    value: Math.max(2, base[i] + ((seed + i * 3) % 5) - 2),
+  }));
+}
+
+function regionGender(femalePct: number) {
+  return [
+    { label: '여성', value: femalePct },
+    { label: '남성', value: 100 - femalePct },
+  ];
+}
+
 export const topInflowRegions = [
-  { rank: 1, city: '수원', count: 2840, pct: 12.3 },
-  { rank: 2, city: '성남', count: 2310, pct: 10.0 },
-  { rank: 3, city: '용인', count: 1980, pct: 8.6 },
-  { rank: 4, city: '인천', count: 1750, pct: 7.6 },
-  { rank: 5, city: '고양', count: 1620, pct: 7.0 },
-  { rank: 6, city: '속초', count: 1480, pct: 6.4 },
-  { rank: 7, city: '춘천', count: 1290, pct: 5.6 },
-  { rank: 8, city: '부천', count: 1150, pct: 5.0 },
-  { rank: 9, city: '안양', count: 980, pct: 4.2 },
-  { rank: 10, city: '화성', count: 870, pct: 3.8 },
+  { rank: 1, slug: 'suwon', city: '수원', count: 2840, pct: 12.3, gender: regionGender(56), age: regionAge(1) },
+  { rank: 2, slug: 'seongnam', city: '성남', count: 2310, pct: 10.0, gender: regionGender(54), age: regionAge(2) },
+  { rank: 3, slug: 'yongin', city: '용인', count: 1980, pct: 8.6, gender: regionGender(58), age: regionAge(3) },
+  { rank: 4, slug: 'incheon', city: '인천', count: 1750, pct: 7.6, gender: regionGender(52), age: regionAge(4) },
+  { rank: 5, slug: 'goyang', city: '고양', count: 1620, pct: 7.0, gender: regionGender(57), age: regionAge(5) },
+  { rank: 6, slug: 'sokcho', city: '속초', count: 1480, pct: 6.4, gender: regionGender(51), age: regionAge(6) },
+  { rank: 7, slug: 'chuncheon', city: '춘천', count: 1290, pct: 5.6, gender: regionGender(53), age: regionAge(7) },
+  { rank: 8, slug: 'bucheon', city: '부천', count: 1150, pct: 5.0, gender: regionGender(55), age: regionAge(8) },
+  { rank: 9, slug: 'anyang', city: '안양', count: 980, pct: 4.2, gender: regionGender(59), age: regionAge(9) },
+  { rank: 10, slug: 'hwaseong', city: '화성', count: 870, pct: 3.8, gender: regionGender(54), age: regionAge(10) },
 ];
+
+export type InflowRegion = (typeof topInflowRegions)[number];
+
+export const interestsAnalysis = {
+  summary: [
+    '식음료·컨텐츠·ART/전시 세그먼트가 일반 기준 대비 lift가 가장 높음',
+    '가족 단위 방문 특성상 출산/육아 세그먼트도 일반 대비 크게 높게 나타남',
+  ],
+  overall: defaultVisitorProfile.interests!,
+};
 
 export const stayTimeAnalysis = [
   { label: '1시간 미만', value: 15, count: 3460 },
   { label: '1~3시간', value: 42, count: 9688 },
   { label: '3~5시간', value: 28, count: 6456 },
   { label: '5시간 이상', value: 15, count: 3456 },
-];
-
-export const gridZones = [
-  { id: 'A1', visitors: 1240, avgStay: 45, gender: { female: 62, male: 38 }, age: '30대' },
-  { id: 'A2', visitors: 2180, avgStay: 72, gender: { female: 55, male: 45 }, age: '30~40대' },
-  { id: 'A3', visitors: 890, avgStay: 38, gender: { female: 48, male: 52 }, age: '20~30대' },
-  { id: 'B1', visitors: 3420, avgStay: 95, gender: { female: 58, male: 42 }, age: '가족 단위' },
-  { id: 'B2', visitors: 4560, avgStay: 120, gender: { female: 52, male: 48 }, age: '전 연령' },
-  { id: 'B3', visitors: 1680, avgStay: 55, gender: { female: 65, male: 35 }, age: '20~40대' },
 ];
 
 export const beforeVisitPlaces = [
@@ -127,12 +205,38 @@ export const afterVisitPlaces = [
   { label: '관광지', value: 10 },
 ];
 
-export const economicImpact = [
-  { label: '식당', amount: 428000000, pct: 35 },
-  { label: '카페', amount: 186000000, pct: 15 },
-  { label: '전통시장', amount: 248000000, pct: 20 },
-  { label: '숙박업소', amount: 372000000, pct: 30 },
-];
+export const movementAnalysis = {
+  before: {
+    items: beforeVisitPlaces.map((p) => ({ label: p.label, overall: p.value })),
+    series: [
+      { label: '10대', color: '#ea002c', values: [14, 12, 18, 10, 8] },
+      { label: '20대', color: '#f47725', values: [22, 28, 20, 16, 12] },
+      { label: '30대', color: '#ff8c42', values: [28, 26, 24, 20, 14] },
+      { label: '40대', color: '#ffc078', values: [20, 18, 22, 24, 18] },
+      { label: '50대', color: '#c9a227', values: [10, 10, 12, 22, 28] },
+      { label: '60대 이상', color: '#adb5bd', values: [6, 6, 4, 8, 20] },
+    ],
+    genderSeries: [
+      { label: '여성', color: '#f47725', values: [54, 52, 56, 50, 48] },
+      { label: '남성', color: '#adb5bd', values: [46, 48, 44, 50, 52] },
+    ],
+  },
+  after: {
+    items: afterVisitPlaces.map((p) => ({ label: p.label, overall: p.value })),
+    series: [
+      { label: '10대', color: '#ea002c', values: [12, 14, 16, 8, 10] },
+      { label: '20대', color: '#f47725', values: [30, 34, 24, 12, 16] },
+      { label: '30대', color: '#ff8c42', values: [32, 30, 26, 18, 14] },
+      { label: '40대', color: '#ffc078', values: [18, 16, 22, 20, 16] },
+      { label: '50대', color: '#c9a227', values: [6, 8, 10, 26, 22] },
+      { label: '60대 이상', color: '#adb5bd', values: [2, 4, 2, 16, 22] },
+    ],
+    genderSeries: [
+      { label: '여성', color: '#f47725', values: [58, 62, 54, 48, 52] },
+      { label: '남성', color: '#adb5bd', values: [42, 38, 46, 52, 48] },
+    ],
+  },
+};
 
 export const surveyKpis = {
   pushSent: 40000,
@@ -189,8 +293,7 @@ export const reportSections = [
   { id: 'inflow', title: '유입지역 분석', status: 'complete' },
   { id: 'stay', title: '체류시간 분석', status: 'complete' },
   { id: 'movement', title: '방문 전/후 이동 분석', status: 'complete' },
-  { id: 'survey', title: '설문 분석', status: 'complete' },
-  { id: 'economic', title: '경제적 파급효과', status: 'complete' },
+  { id: 'survey', title: '만족도 조사', status: 'complete' },
   { id: 'ai', title: 'AI 인사이트', status: 'complete' },
   { id: 'improvement', title: '개선 제안', status: 'complete' },
 ];
@@ -198,15 +301,11 @@ export const reportSections = [
 export const aiInsights = [
   {
     title: '홍보 효율성',
-    content: '수도권 30~40대 여성 타겟 CTR이 18.2%로 전체 평균 대비 21% 높음. 유사 타겟 확대 권장.',
+    content: '수도권 2050 여성 타겟 클릭율이 18.2%로 전체 평균 대비 21% 높음. 유사 타겟 확대 권장.',
   },
   {
-    title: '공간 활용',
-    content: 'B2 구역(메인 무대) 체류시간 평균 120분으로 최고. A3 구역은 유동 인구 대비 체류시간 낮아 콘텐츠 보강 필요.',
-  },
-  {
-    title: '경제 효과',
-    content: '축제 방문 후 지역 추가 소비 총액 5.3억원. 숙박 연계 시 경제 파급효과 30% 이상 증대 예상.',
+    title: '방문 패턴',
+    content: '수도권·인근 광역시 유입이 높고, 가족·연인 동반 방문 비중이 상대적으로 큼. 체류시간 1~3시간 구간이 가장 많음.',
   },
   {
     title: '개선 제안',
