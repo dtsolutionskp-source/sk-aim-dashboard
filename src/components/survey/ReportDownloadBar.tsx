@@ -22,14 +22,14 @@ export function ReportDownloadBar() {
   });
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="-mx-1 mobile-scroll-x flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:pb-0">
       {formats.map((item) => (
         <button
           key={item.format}
           type="button"
           disabled={Boolean(exporting)}
           onClick={() => handleExport(item.format)}
-          className="flex items-center gap-1.5 rounded-lg border border-sk-gray-200 bg-white px-3.5 py-2 text-xs font-medium text-sk-gray-700 shadow-sm transition-all hover:border-sk-orange/30 hover:text-sk-orange disabled:cursor-wait disabled:opacity-60"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg border border-sk-gray-200 bg-white px-3 py-2 text-xs font-medium text-sk-gray-700 shadow-sm transition-all hover:border-sk-orange/30 hover:text-sk-orange active:scale-[0.98] disabled:cursor-wait disabled:opacity-60 sm:px-3.5"
         >
           <Download className="h-3.5 w-3.5" />
           {exporting === item.format

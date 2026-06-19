@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -15,11 +15,11 @@ import { festivalInfo } from '../data/mockData';
 import { PageTransition } from './motion';
 
 const navItems = [
-  { to: '/', icon: Home, label: '홈', end: true },
-  { to: '/marketing', icon: Megaphone, label: '마케팅' },
-  { to: '/data-analysis', icon: BarChart3, label: '데이터 분석' },
-  { to: '/survey', icon: ClipboardList, label: '만족도 조사' },
-  { to: '/report', icon: FileText, label: '성과 리포트' },
+  { to: '/', icon: Home, label: '홈', shortLabel: '홈', end: true },
+  { to: '/marketing', icon: Megaphone, label: '마케팅', shortLabel: '마케팅' },
+  { to: '/data-analysis', icon: BarChart3, label: '데이터 분석', shortLabel: '분석' },
+  { to: '/survey', icon: ClipboardList, label: '만족도 조사', shortLabel: '설문' },
+  { to: '/report', icon: FileText, label: '성과 리포트', shortLabel: '리포트' },
 ];
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
@@ -80,14 +80,23 @@ export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen min-h-[100dvh]">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[260px] flex-col border-r border-sk-gray-200/80 bg-white lg:flex">
         <SidebarContent />
       </aside>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -103,7 +112,7 @@ export default function Layout() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="fixed inset-y-0 left-0 z-50 flex w-[280px] flex-col bg-white shadow-elevated lg:hidden"
+              className="fixed inset-y-0 left-0 z-50 flex w-[min(280px,85vw)] flex-col bg-white shadow-elevated safe-top lg:hidden"
             >
               <button
                 onClick={() => setMobileOpen(false)}
@@ -118,43 +127,55 @@ export default function Layout() {
         )}
       </AnimatePresence>
 
-      <div className="flex min-h-screen flex-1 flex-col lg:ml-[260px]">
-        {/* Mobile header */}
-        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-sk-gray-200/80 bg-white/90 px-4 py-3 backdrop-blur-md lg:hidden">
+      <div className="flex min-h-[100dvh] min-w-0 flex-1 flex-col lg:ml-[260px]">
+        {/* Mobile top bar */}
+        <header className="safe-top sticky top-0 z-30 flex items-center justify-between border-b border-sk-gray-200/80 bg-white/95 px-3 py-2.5 backdrop-blur-md sm:px-4 lg:hidden">
           <button
             onClick={() => setMobileOpen(true)}
-            className="rounded-xl p-2.5 text-sk-gray-600 hover:bg-sk-gray-50"
+            className="rounded-xl p-2.5 text-sk-gray-600 hover:bg-sk-gray-50 active:bg-sk-gray-100"
             aria-label="메뉴 열기"
           >
             <Menu className="h-5 w-5" />
           </button>
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-sk text-[10px] font-bold text-white">
-              AIM
+          <div className="min-w-0 flex-1 px-2 text-center">
+            <div className="flex items-center justify-center gap-2">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg gradient-sk text-[10px] font-bold text-white">
+                AIM
+              </div>
+              <span className="truncate text-sm font-bold text-sk-gray-800">SK AIM</span>
             </div>
-            <span className="text-sm font-bold text-sk-gray-800">SK AIM</span>
           </div>
-          <div className="w-10" />
+          <div className="w-10 shrink-0" aria-hidden />
         </header>
 
-        {/* Mobile bottom nav */}
-        <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-sk-gray-200/80 bg-white/95 backdrop-blur-md lg:hidden">
-          <div className="flex items-stretch justify-around px-1 py-1">
+        {/* Mobile bottom tab bar */}
+        <nav
+          className="safe-bottom fixed bottom-0 left-0 right-0 z-30 border-t border-sk-gray-200/80 bg-white/95 backdrop-blur-md lg:hidden"
+          aria-label="주요 메뉴"
+        >
+          <div className="flex items-stretch justify-around px-0.5 pb-[max(0.25rem,env(safe-area-inset-bottom))] pt-1">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.end}
+                onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `flex flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-2 text-[10px] font-medium transition-colors ${
+                  `flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-lg px-0.5 py-1.5 text-[10px] font-medium transition-colors active:scale-95 ${
                     isActive ? 'text-sk-orange' : 'text-sk-gray-400'
                   }`
                 }
               >
                 {({ isActive }) => (
                   <>
-                    <item.icon className={`h-[18px] w-[18px] ${isActive ? 'text-sk-orange' : ''}`} />
-                    <span className="truncate">{item.label}</span>
+                    <span
+                      className={`flex h-8 w-8 items-center justify-center rounded-xl transition-colors ${
+                        isActive ? 'bg-sk-orange-light' : ''
+                      }`}
+                    >
+                      <item.icon className={`h-[18px] w-[18px] ${isActive ? 'text-sk-orange' : ''}`} />
+                    </span>
+                    <span className="max-w-full truncate px-0.5">{item.shortLabel}</span>
                   </>
                 )}
               </NavLink>
@@ -162,7 +183,7 @@ export default function Layout() {
           </div>
         </nav>
 
-        <main className="flex-1 pb-20 lg:pb-0">
+        <main className="min-w-0 flex-1 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
           <AnimatePresence mode="wait">
             <PageTransition key={location.pathname}>
               <Outlet />
@@ -184,20 +205,20 @@ interface PageHeaderProps {
 export function PageHeader({ title, description, breadcrumb, action }: PageHeaderProps) {
   return (
     <div className="border-b border-sk-gray-200/80 bg-white">
-      <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
+      <div className="px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
         {breadcrumb && (
           <div className="mb-2 flex items-center gap-1 text-xs text-sk-gray-400">
-            <span>SK AIM</span>
-            <ChevronRight className="h-3 w-3" />
-            <span className="font-medium text-sk-orange">{breadcrumb}</span>
+            <span className="shrink-0">SK AIM</span>
+            <ChevronRight className="h-3 w-3 shrink-0" />
+            <span className="truncate font-medium text-sk-orange">{breadcrumb}</span>
           </div>
         )}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="text-xl font-bold tracking-tight text-sk-gray-800 sm:text-2xl">{title}</h2>
-            <p className="mt-1 text-sm text-sk-gray-500">{description}</p>
+        <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="min-w-0">
+            <h2 className="text-lg font-bold tracking-tight text-sk-gray-800 sm:text-2xl">{title}</h2>
+            <p className="mt-1 text-sm leading-relaxed text-sk-gray-500">{description}</p>
           </div>
-          {action && <div className="shrink-0">{action}</div>}
+          {action && <div className="w-full shrink-0 md:w-auto">{action}</div>}
         </div>
       </div>
     </div>
@@ -205,5 +226,9 @@ export function PageHeader({ title, description, breadcrumb, action }: PageHeade
 }
 
 export function PageContent({ children }: { children: React.ReactNode }) {
-  return <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">{children}</div>;
+  return (
+    <div className="mx-auto w-full max-w-[1400px] px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+      {children}
+    </div>
+  );
 }

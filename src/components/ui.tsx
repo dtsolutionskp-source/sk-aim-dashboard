@@ -189,6 +189,15 @@ export function Tag({ children, active, tooltip }: TagProps) {
     setPos({ top: rect.top - 10, left });
   }, []);
 
+  const showTooltip = useCallback(() => {
+    updatePosition();
+    setShow(true);
+  }, [updatePosition]);
+
+  const hideTooltip = useCallback(() => {
+    setShow(false);
+  }, []);
+
   const tagClass = `inline-flex cursor-default items-center rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
     active
       ? 'border border-sk-orange/20 bg-sk-orange-light text-sk-orange'
@@ -202,11 +211,11 @@ export function Tag({ children, active, tooltip }: TagProps) {
           ref={ref}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onMouseEnter={() => {
-            updatePosition();
-            setShow(true);
-          }}
-          onMouseLeave={() => setShow(false)}
+          onMouseEnter={showTooltip}
+          onMouseLeave={hideTooltip}
+          onClick={() => (show ? hideTooltip() : showTooltip())}
+          onBlur={hideTooltip}
+          tabIndex={0}
           className={tagClass}
         >
           {children}

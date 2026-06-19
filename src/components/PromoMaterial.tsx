@@ -10,28 +10,29 @@ interface PromoMaterialSelectorProps {
 
 export function PromoMaterialSelector({ materials, selectedId, onSelect }: PromoMaterialSelectorProps) {
   return (
-    <div className="grid gap-3 sm:grid-cols-3">
-      {materials.map((material, i) => {
-        const isSelected = material.id === selectedId;
-        const clickRate = material.stats.impressions
-          ? ((material.stats.clicks / material.stats.impressions) * 100).toFixed(1)
-          : material.stats.sent > 0
-            ? ((material.stats.clicks / material.stats.sent) * 100).toFixed(1)
-            : null;
+    <div className="-mx-1 mobile-scroll-x overflow-x-auto px-1 pb-1 sm:mx-0 sm:overflow-visible sm:pb-0">
+      <div className="flex min-w-min gap-2.5 sm:grid sm:min-w-0 sm:grid-cols-3 sm:gap-3">
+        {materials.map((material, i) => {
+          const isSelected = material.id === selectedId;
+          const clickRate = material.stats.impressions
+            ? ((material.stats.clicks / material.stats.impressions) * 100).toFixed(1)
+            : material.stats.sent > 0
+              ? ((material.stats.clicks / material.stats.sent) * 100).toFixed(1)
+              : null;
 
-        return (
-          <motion.button
-            key={material.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.06 }}
-            onClick={() => onSelect(material.id)}
-            className={`rounded-xl border p-4 text-left transition-all ${
-              isSelected
-                ? 'border-sk-orange/40 bg-sk-orange-light shadow-sm ring-1 ring-sk-orange/20'
-                : 'border-sk-gray-200/80 bg-white hover:border-sk-gray-300 hover:shadow-sm'
-            }`}
-          >
+          return (
+            <motion.button
+              key={material.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.06 }}
+              onClick={() => onSelect(material.id)}
+              className={`w-[min(240px,72vw)] shrink-0 rounded-xl border p-4 text-left transition-all sm:w-auto ${
+                isSelected
+                  ? 'border-sk-orange/40 bg-sk-orange-light shadow-sm ring-1 ring-sk-orange/20'
+                  : 'border-sk-gray-200/80 bg-white hover:border-sk-gray-300 hover:shadow-sm'
+              }`}
+            >
             <p className={`font-semibold ${isSelected ? 'text-sk-orange' : 'text-sk-gray-800'}`}>
               {material.title}
             </p>
@@ -53,6 +54,7 @@ export function PromoMaterialSelector({ materials, selectedId, onSelect }: Promo
           </motion.button>
         );
       })}
+      </div>
     </div>
   );
 }
@@ -160,7 +162,7 @@ export function PromoPreview({ material }: PromoPreviewProps) {
 
         <div
           className={`grid gap-5 ${
-            material.previews.length > 1 ? 'lg:grid-cols-2' : ''
+            material.previews.length > 1 ? 'grid-cols-1 md:grid-cols-2' : ''
           }`}
         >
           {material.previews.map((preview, idx) => (

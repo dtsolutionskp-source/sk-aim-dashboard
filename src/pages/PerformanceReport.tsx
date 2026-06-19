@@ -69,7 +69,7 @@ export default function PerformanceReport() {
         </motion.div>
 
         {/* Download buttons */}
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:max-w-md">
+        <div className="mt-5 grid grid-cols-1 gap-3 sm:max-w-md sm:grid-cols-2">
           {downloadFormats.map((dl, i) => {
             const isLoading = exporting === dl.format;
             return (

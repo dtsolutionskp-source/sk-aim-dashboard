@@ -48,10 +48,12 @@ export default function SurveyAnalysis() {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-2xl border border-sk-gray-200/80 bg-white p-6 shadow-card"
         >
-          <div className="mb-4 flex items-center gap-2">
-            <FileBarChart className="h-5 w-5 text-sk-orange" />
-            <h2 className="text-lg font-bold text-sk-gray-800">조사 개요</h2>
-            <span className="ml-auto text-xs text-sk-gray-400">조사기간 {surveyOverview.period}</span>
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
+            <div className="flex items-center gap-2">
+              <FileBarChart className="h-5 w-5 shrink-0 text-sk-orange" />
+              <h2 className="text-base font-bold text-sk-gray-800 sm:text-lg">조사 개요</h2>
+            </div>
+            <span className="text-xs text-sk-gray-400 sm:ml-auto">조사기간 {surveyOverview.period}</span>
           </div>
 
           <div className="mb-5 rounded-xl border border-sk-orange/15 bg-sk-orange-light/25 px-4 py-3">

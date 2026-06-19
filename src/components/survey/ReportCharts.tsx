@@ -175,7 +175,8 @@ export function VBarChart({
 }) {
   const max = Math.max(...data.map((d) => d.value));
   return (
-    <div className="flex items-end justify-between gap-1.5" style={{ height: 160 }}>
+    <div className="mobile-scroll-x -mx-1 overflow-x-auto px-1 sm:mx-0 sm:overflow-visible sm:px-0">
+      <div className="flex min-w-[280px] items-end justify-between gap-1.5 sm:min-w-0" style={{ height: 160 }}>
       {data.map((d, i) => (
         <ChartTooltip key={d.label} label={d.label} value={d.value} total={total}>
           <div className="flex flex-1 flex-col items-center gap-1">
@@ -188,10 +189,11 @@ export function VBarChart({
               transition={{ delay: i * 0.04, duration: 0.5 }}
               style={{ minHeight: 4 }}
             />
-            <span className="mt-1 text-center text-[9px] leading-tight text-sk-gray-500">{d.label}</span>
+            <span className="mt-1 max-w-[3.5rem] text-center text-[9px] leading-tight text-sk-gray-500 sm:max-w-none">{d.label}</span>
           </div>
         </ChartTooltip>
       ))}
+      </div>
     </div>
   );
 }
