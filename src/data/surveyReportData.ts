@@ -1,5 +1,7 @@
 /** 해오름 야간문화축제 방문객 만족도 조사 — 공공기관 보고서용 데이터 */
 
+import { festivalInfo } from './mockData';
+
 export const TOTAL_RESPONDENTS = 487;
 
 /** 연령대 공통 색상 (상세 분석용) */
@@ -19,9 +21,9 @@ export type UnifiedChartData = {
 
 export const surveyOverview = {
   title: '축제 방문객 만족도 조사',
-  subtitle: '2026 해오름 야간문화축제 방문객 대상 설문조사 결과',
+  subtitle: `${festivalInfo.name} 방문객 대상 설문조사 결과`,
   period: '2026.10.24 ~ 2026.10.26',
-  target: '2026 해오름 야간 문화 축제 방문 고객',
+  target: `${festivalInfo.name} 방문 고객`,
   purpose:
     '축제 방문객의 만족도, 방문 목적, 소비행태, 재방문 의향 등을 파악하고 향후 축제 운영 및 정책 수립에 활용하기 위함',
   kpis: [
@@ -59,19 +61,19 @@ export const respondentProfile = {
   ],
   /** 외지인 출발 지역 (외지인 331명 기준 비율) */
   nonResidentOrigins: [
-    { label: '원주시', value: 14 },
-    { label: '횡성군', value: 12 },
-    { label: '춘천시', value: 8 },
-    { label: '홍천군', value: 5 },
-    { label: '수도권', value: 22 },
-    { label: '강원 기타', value: 6 },
-    { label: '충청권', value: 5 },
+    { label: '청송시', value: 14 },
+    { label: '자오군', value: 12 },
+    { label: '청계시', value: 8 },
+    { label: '운봉군', value: 5 },
+    { label: '광역권', value: 22 },
+    { label: '인근권 기타', value: 6 },
+    { label: '중부권', value: 5 },
     { label: '타 광역시', value: 6 },
   ],
   nonResidentByCategory: [
-    { label: '인근 시군', value: 41, detail: '원주·횡성·춘천·홍천 등' },
-    { label: '광역권', value: 38, detail: '수도권·충청권 등' },
-    { label: '타지역', value: 21, detail: '부산·대구·광주 등' },
+    { label: '인근 시군', value: 41, detail: '청송·자오·청계·운봉 등' },
+    { label: '광역권', value: 38, detail: '광역권·중부권 등' },
+    { label: '타지역', value: 21, detail: '남부·서부·동부 등' },
   ],
   companion: [
     { label: '가족', value: 43, color: '#f47725' },
@@ -132,13 +134,13 @@ export const respondentProfile = {
     },
     nonResidentOrigins: {
       items: [
-        { label: '원주시', overall: 14 },
-        { label: '횡성군', overall: 12 },
-        { label: '춘천시', overall: 8 },
-        { label: '홍천군', overall: 5 },
-        { label: '수도권', overall: 22 },
-        { label: '강원 기타', overall: 6 },
-        { label: '충청권', overall: 5 },
+        { label: '청송시', overall: 14 },
+        { label: '자오군', overall: 12 },
+        { label: '청계시', overall: 8 },
+        { label: '운봉군', overall: 5 },
+        { label: '광역권', overall: 22 },
+        { label: '인근권 기타', overall: 6 },
+        { label: '중부권', overall: 5 },
         { label: '타 광역시', overall: 6 },
       ],
       series: [
@@ -585,7 +587,7 @@ export const surveySectionSummaries = {
   ],
   profile: [
     '외지인 68%·가족 동반 43%로 외지인·가족 단위 방문이 주류',
-    '수도권·인근 시군 유입 비중이 높고, 여성 응답자가 52%로 다소 많음',
+    '광역권·인근 시군 유입 비중이 높고, 여성 응답자가 52%로 다소 많음',
   ],
   awareness: [
     '푸쉬(28%)·SNS(24%)가 인지 경로 1·2위',

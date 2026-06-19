@@ -24,14 +24,14 @@ export const defaultVisitorProfile: CustomerProfile = {
   ],
   traits: [
     '가족·연인 동반 방문 비중 높음',
-    '수도권·인근 광역시에서의 유입이 주를 이룸',
+    '광역권·인근 도시에서의 유입이 주를 이룸',
     '야간 문화·축제 콘텐츠 관심층 집중',
     '주말·저녁 시간대 방문 비중 높음',
   ],
   residence: [
-    { label: '수도권', value: 54 },
-    { label: '강원', value: 26 },
-    { label: '충청', value: 12 },
+    { label: '광역권', value: 54 },
+    { label: '인근권', value: 26 },
+    { label: '중부권', value: 12 },
     { label: '기타', value: 8 },
   ],
   interests: [
@@ -66,16 +66,16 @@ export const estimatedCustomerProfile: CustomerProfile = {
     { label: '50대 이상', value: 6 },
   ],
   traits: [
-    '수도권 거주·근무',
+    '광역권 거주·근무',
     '가족 단위(기혼·키즈) 방문 성향',
     '여행·관광 App 이용 활발',
     '야간 문화·축제 콘텐츠 관심 높음',
     '2050 여성 핵심 타겟 집중',
   ],
   residence: [
-    { label: '수도권', value: 68 },
-    { label: '강원', value: 14 },
-    { label: '충청', value: 10 },
+    { label: '광역권', value: 68 },
+    { label: '인근권', value: 14 },
+    { label: '중부권', value: 10 },
     { label: '기타', value: 8 },
   ],
   interests: [
@@ -113,14 +113,14 @@ export const actualVisitorProfile: CustomerProfile = {
   traits: [
     '가족 단위 방문 비중 추정 대비 +12%p',
     '20~30대 유입 추정보다 높음',
-    '수도권 유입 52% (추정 68% 대비 낮음)',
+    '광역권 유입 52% (추정 68% 대비 낮음)',
     '드론쇼·먹거리 관심 집중',
     '현장 신규 유입층(10대) 비중 확대',
   ],
   residence: [
-    { label: '수도권', value: 52 },
-    { label: '강원', value: 28 },
-    { label: '충청', value: 12 },
+    { label: '광역권', value: 52 },
+    { label: '인근권', value: 28 },
+    { label: '중부권', value: 12 },
     { label: '기타', value: 8 },
   ],
   interests: [

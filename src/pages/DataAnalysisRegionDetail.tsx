@@ -29,7 +29,7 @@ export default function DataAnalysisRegionDetail() {
     traits: [
       `${region.city} 거주·방문 고객 기준 성별·연령 분포`,
       `전체 방문객 ${TOTAL_VISITORS.toLocaleString()}명 중 ${region.count.toLocaleString()}명 유입`,
-      region.rank <= 3 ? '수도권 핵심 유입 권역' : '인근·광역 유입 권역',
+      region.rank <= 3 ? '광역권 핵심 유입 권역' : '인근·광역 유입 권역',
     ],
   };
 

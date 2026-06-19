@@ -16,7 +16,7 @@ import { defaultVisitorProfile } from '../data/customerProfiles';
 const kpiItems = [
   { label: '총 방문객', value: TOTAL_VISITORS, unit: '명', change: 18, highlight: true },
   { label: '평균 체류시간', value: 3.2, unit: '시간', change: 5 },
-  { label: '수도권 유입', value: 52, unit: '%', change: 3 },
+  { label: '광역권 유입', value: 52, unit: '%', change: 3 },
   { label: '추가 소비율', value: 68, unit: '%', change: 7 },
 ];
 

@@ -1,23 +1,21 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Download, FileText, CheckCircle2, Sparkles, Image, Printer } from 'lucide-react';
+import { Download, FileText, CheckCircle2, Sparkles, Image } from 'lucide-react';
 import { PageHeader, PageContent } from '../components/Layout';
 import { Card } from '../components/ui';
 import ReportPreview from '../components/ReportPreview';
 import { festivalInfo, reportSections, aiInsights } from '../data/mockData';
 import {
   buildPerformanceReportDocument,
+  buildPerformanceReportSlides,
   PERFORMANCE_REPORT_FILENAME_BASE,
 } from '../reports/buildPerformanceReportDocument';
 import { useReportExport } from '../utils/useReportExport';
 import type { ReportFormat } from '../types/report';
 
-const downloadFormats: { label: string; sub: string; format: ReportFormat; icon?: 'print' }[] = [
-  { label: 'PDF', sub: '다운로드', format: 'pdf' },
-  { label: '인쇄', sub: '바로 출력', format: 'print', icon: 'print' },
-  { label: 'PPT', sub: '다운로드', format: 'ppt' },
-  { label: 'Word', sub: '다운로드', format: 'docx' },
-  { label: 'HWP', sub: 'RTF 저장', format: 'hwp' },
+const downloadFormats: { label: string; sub: string; format: ReportFormat }[] = [
+  { label: 'PDF', sub: '가로 PT', format: 'pdf' },
+  { label: 'PPT', sub: '16:9 슬라이드', format: 'ppt' },
 ];
 
 const attachImages = [
@@ -32,8 +30,10 @@ export default function PerformanceReport() {
   );
   const { exporting, handleExport } = useReportExport({
     buildHtml: buildPerformanceReportDocument,
+    buildPerformanceSlides: buildPerformanceReportSlides,
     filenameBase: PERFORMANCE_REPORT_FILENAME_BASE,
     title: reportTitle,
+    landscape: true,
   });
 
   return (
@@ -69,10 +69,9 @@ export default function PerformanceReport() {
         </motion.div>
 
         {/* Download buttons */}
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:max-w-md">
           {downloadFormats.map((dl, i) => {
             const isLoading = exporting === dl.format;
-            const Icon = dl.icon === 'print' ? Printer : Download;
             return (
             <motion.button
               key={dl.format}
@@ -86,7 +85,7 @@ export default function PerformanceReport() {
               className="group flex flex-col items-center gap-2 rounded-2xl border border-sk-gray-200/80 bg-white px-4 py-5 shadow-card transition-all hover:border-sk-orange/25 hover:shadow-card-hover disabled:cursor-wait disabled:opacity-60"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sk-gray-25 text-sk-gray-600 transition-colors group-hover:gradient-sk group-hover:text-white">
-                <Icon className="h-4 w-4" />
+                <Download className="h-4 w-4" />
               </div>
               <div className="text-center">
                 <p className="text-sm font-bold text-sk-gray-800">

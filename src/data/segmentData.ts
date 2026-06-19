@@ -85,7 +85,7 @@ export const segmentAnalysis = {
   benchmarkLabel: '일반 기준',
   targetLabel: '축제 방문객',
   benchmarkDescription: 'SK 위치데이터 기반 광역 평균 관심사 점유율',
-  targetDescription: '2026 해오름 야간문화축제 방문객 관심사 점유율',
+  targetDescription: '해오름 야간문화축제 방문객 관심사 점유율',
   totalVisitors: TOTAL_VISITORS,
   benchmarkGender: { female: 48.2, male: 51.8 },
   targetGender: { female: 55, male: 45 },
@@ -113,7 +113,7 @@ export const segmentAnalysis = {
     }),
     seg('outdoor', '등산/아웃도어/레저', 22.4, 28.6, {
       badge: 'outperform',
-      insight: '강원권 축제 특성상 아웃도어·레저 관심이 일반 대비 높게 나타납니다.',
+      insight: '인근권 축제 특성상 아웃도어·레저 관심이 일반 대비 높게 나타납니다.',
       gender: { female: 46, male: 54 },
       age: [8, 18, 24, 30, 20],
       benchmarkAge: [7, 28, 32, 20, 13],
@@ -127,7 +127,7 @@ export const segmentAnalysis = {
     }),
     seg('auto', '자동차', 18.5, 26.1, {
       badge: 'highlight',
-      insight: '수도권·인근 광역 유입과 맞물려 자동차 관심 비중이 높습니다.',
+      insight: '광역권·인근 도시 유입과 맞물려 자동차 관심 비중이 높습니다.',
       gender: { female: 38, male: 62 },
       age: [8, 18, 22, 30, 22],
       benchmarkAge: [7, 28, 32, 20, 13],

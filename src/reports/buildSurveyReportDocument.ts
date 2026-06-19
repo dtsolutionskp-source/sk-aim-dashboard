@@ -31,7 +31,7 @@ export function buildSurveyReportDocument(): string {
 
   const body = `
     <header class="doc-header">
-      <p class="org">속초시청 관광문화과</p>
+      <p class="org">${escapeHtml(festivalInfo.organizer)}</p>
       <h1>${escapeHtml(surveyOverview.title)}</h1>
       <p class="subtitle">결과 보고서</p>
       <p class="meta">${escapeHtml(surveyOverview.period)} · ${escapeHtml(surveyOverview.target)}</p>

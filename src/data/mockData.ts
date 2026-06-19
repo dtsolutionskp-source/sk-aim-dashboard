@@ -6,8 +6,8 @@ export const TOTAL_VISITORS = 23060;
 export const festivalInfo = {
   name: '해오름 야간문화축제',
   period: '2025.10.01 ~ 2025.10.05',
-  location: '강원도 속초시 해오름광장 일원',
-  organizer: '속초시청 관광문화과',
+  location: '해오름시 중앙공원 일원',
+  organizer: '해오름시청 관광문화과',
 };
 
 export const marketingKpis = {
@@ -31,9 +31,9 @@ export const targetSegments = [
     tooltip: '기혼/키즈 App 다회 이용 고객/방문 목적지 중 유치원,초등학교 다회 방문 고객',
   },
   {
-    label: '수도권거주',
+    label: '광역권거주',
     active: true,
-    tooltip: 'SK 위치데이터 기반 거주지 및 근무지 수도권 고객',
+    tooltip: 'SK 위치데이터 기반 거주지 및 근무지 광역권 고객',
   },
   {
     label: '여행/관광 관심 고객',
@@ -54,13 +54,37 @@ export interface MaterialKpi {
   decimals?: number;
 }
 
+/** 성과 보고서용 Push 발송 행 (SK플래닛 결과리포트 형식) */
+export interface PromoPushRow {
+  media: string;
+  sendDate: string;
+  sent: number;
+  reach: number;
+  clicks: number;
+  clickRate: number;
+}
+
+/** 성과 보고서용 앱 배너 노출 행 */
+export interface PromoBannerRow {
+  media: string;
+  period: string;
+  placement: string;
+  impressions: number;
+  clicks: number;
+  clickRate: number;
+}
+
 export interface PromoMaterial {
   id: PromoMaterialId;
   title: string;
+  /** 보고서 장표 제목 (예: 타겟 Push 진행) */
+  reportHeading: string;
   description: string;
   stats: { sent: number; clicks: number; impressions?: number };
   kpis: MaterialKpi[];
   schedule: { type: 'send' | 'exposure'; label: string; period: string };
+  pushRows?: PromoPushRow[];
+  bannerRows?: PromoBannerRow[];
   previews: {
     label: string;
     image: string;
@@ -79,9 +103,14 @@ export const promoMaterials: PromoMaterial[] = [
   {
     id: 'promo-push',
     title: '홍보 푸쉬',
-    description: '2026 야간문화 축제 홍보 푸쉬',
+    reportHeading: '타겟 Push 진행',
+    description: '해오름 야간문화축제 개막 홍보 타겟 Push',
     stats: { sent: 85000, clicks: 10200 },
-    schedule: { type: 'send', label: '발송일', period: '2025.09.28' },
+    schedule: { type: 'send', label: '발송일', period: '2025.09.25 ~ 2025.09.28' },
+    pushRows: [
+      { media: 'SKT Push', sendDate: '9월 25일', sent: 45000, reach: 38500, clicks: 4620, clickRate: 12.0 },
+      { media: 'SKT Push', sendDate: '9월 28일', sent: 40000, reach: 34300, clicks: 5580, clickRate: 12.0 },
+    ],
     kpis: [
       { label: '푸쉬 발송 수', value: 85000, unit: '건', change: 12, changeLabel: '전년 대비' },
       { label: '도달 고객 수', value: 72800, unit: '명', change: 9, changeLabel: '전년 대비' },
@@ -96,9 +125,14 @@ export const promoMaterials: PromoMaterial[] = [
   {
     id: 'survey-push',
     title: '설문 참여 푸쉬',
-    description: '방문 후 설문 참여 독려 푸쉬',
+    reportHeading: 'G/F Push 진행',
+    description: '축제장 Geofence 내 방문객 설문 참여 독려 Push',
     stats: { sent: 40000, clicks: 4530 },
     schedule: { type: 'send', label: '발송일', period: '2025.10.02 ~ 2025.10.05' },
+    pushRows: [
+      { media: 'SKT Push', sendDate: '10월 2일', sent: 20000, reach: 16800, clicks: 2260, clickRate: 11.3 },
+      { media: 'SKT Push', sendDate: '10월 4일', sent: 20000, reach: 16800, clicks: 2270, clickRate: 11.3 },
+    ],
     kpis: [
       { label: '푸쉬 발송 수', value: 40000, unit: '건', change: 8, changeLabel: '전년 대비' },
       { label: '도달 고객 수', value: 33600, unit: '명', change: 6, changeLabel: '전년 대비' },
@@ -113,9 +147,16 @@ export const promoMaterials: PromoMaterial[] = [
   {
     id: 'main-banner',
     title: '메인 배너',
-    description: '모바일 전단지 및 앱 배너 노출',
+    reportHeading: '앱 노출 진행',
+    description: 'T map · O2 앱 내 축제 홍보 배너 노출',
     stats: { sent: 0, clicks: 42800, impressions: 892000 },
     schedule: { type: 'exposure', label: '노출 기간', period: '2025.09.20 ~ 2025.10.10' },
+    bannerRows: [
+      { media: 'T map', period: '9/20~10/10', placement: '라이프스타일 배너', impressions: 185420, clicks: 3048, clickRate: 1.64 },
+      { media: 'T map', period: '9/20~10/10', placement: '이벤트 배너', impressions: 96840, clicks: 2342, clickRate: 2.42 },
+      { media: 'O2', period: '9/20~10/10', placement: '메인 상단 DA', impressions: 312680, clicks: 17824, clickRate: 5.7 },
+      { media: 'O2', period: '9/20~10/10', placement: '모바일 전단지', impressions: 297060, clicks: 19586, clickRate: 6.6 },
+    ],
     kpis: [
       { label: '노출수', value: 892000, unit: '건', change: 32, changeLabel: '전년 대비' },
       { label: '클릭수', value: 42800, unit: '건', change: 18, changeLabel: '전년 대비' },
@@ -129,11 +170,11 @@ export const promoMaterials: PromoMaterial[] = [
 ];
 
 export const regionalResponse = [
-  { region: '서울', rate: 18.5, visitors: 4250 },
-  { region: '경기', rate: 22.3, visitors: 5120 },
-  { region: '인천', rate: 12.8, visitors: 2940 },
-  { region: '충청', rate: 9.2, visitors: 2110 },
-  { region: '강원', rate: 28.4, visitors: 6520 },
+  { region: 'A권역', rate: 18.5, visitors: 4250 },
+  { region: 'B권역', rate: 22.3, visitors: 5120 },
+  { region: 'C권역', rate: 12.8, visitors: 2940 },
+  { region: 'D권역', rate: 9.2, visitors: 2110 },
+  { region: 'E권역', rate: 28.4, visitors: 6520 },
   { region: '기타', rate: 8.8, visitors: 2020 },
 ];
 
@@ -160,23 +201,23 @@ function regionGender(femalePct: number) {
 }
 
 export const topInflowRegions = [
-  { rank: 1, slug: 'suwon', city: '수원', count: 2840, pct: 12.3, gender: regionGender(56), age: regionAge(1) },
-  { rank: 2, slug: 'seongnam', city: '성남', count: 2310, pct: 10.0, gender: regionGender(54), age: regionAge(2) },
-  { rank: 3, slug: 'yongin', city: '용인', count: 1980, pct: 8.6, gender: regionGender(58), age: regionAge(3) },
-  { rank: 4, slug: 'incheon', city: '인천', count: 1750, pct: 7.6, gender: regionGender(52), age: regionAge(4) },
-  { rank: 5, slug: 'goyang', city: '고양', count: 1620, pct: 7.0, gender: regionGender(57), age: regionAge(5) },
-  { rank: 6, slug: 'sokcho', city: '속초', count: 1480, pct: 6.4, gender: regionGender(51), age: regionAge(6) },
-  { rank: 7, slug: 'chuncheon', city: '춘천', count: 1290, pct: 5.6, gender: regionGender(53), age: regionAge(7) },
-  { rank: 8, slug: 'bucheon', city: '부천', count: 1150, pct: 5.0, gender: regionGender(55), age: regionAge(8) },
-  { rank: 9, slug: 'anyang', city: '안양', count: 980, pct: 4.2, gender: regionGender(59), age: regionAge(9) },
-  { rank: 10, slug: 'hwaseong', city: '화성', count: 870, pct: 3.8, gender: regionGender(54), age: regionAge(10) },
+  { rank: 1, slug: 'gaon', city: '가온시', count: 2840, pct: 12.3, gender: regionGender(56), age: regionAge(1) },
+  { rank: 2, slug: 'seorim', city: '서림시', count: 2310, pct: 10.0, gender: regionGender(54), age: regionAge(2) },
+  { rank: 3, slug: 'dongwon', city: '동원시', count: 1980, pct: 8.6, gender: regionGender(58), age: regionAge(3) },
+  { rank: 4, slug: 'bukhae', city: '북해시', count: 1750, pct: 7.6, gender: regionGender(52), age: regionAge(4) },
+  { rank: 5, slug: 'namsan', city: '남산시', count: 1620, pct: 7.0, gender: regionGender(57), age: regionAge(5) },
+  { rank: 6, slug: 'haeoreum', city: '해오름시', count: 1480, pct: 6.4, gender: regionGender(51), age: regionAge(6) },
+  { rank: 7, slug: 'cheonggye', city: '청계시', count: 1290, pct: 5.6, gender: regionGender(53), age: regionAge(7) },
+  { rank: 8, slug: 'onyang', city: '온양시', count: 1150, pct: 5.0, gender: regionGender(55), age: regionAge(8) },
+  { rank: 9, slug: 'mugung', city: '무궁시', count: 980, pct: 4.2, gender: regionGender(59), age: regionAge(9) },
+  { rank: 10, slug: 'sinpyeong', city: '신평시', count: 870, pct: 3.8, gender: regionGender(54), age: regionAge(10) },
 ];
 
 export type InflowRegion = (typeof topInflowRegions)[number];
 
 export const interestsAnalysis = {
   summary: [
-    '식음료·컨텐츠·ART/전시 세그먼트가 일반 기준 대비 lift가 가장 높음',
+    '식음료·컨텐츠·ART/전시 세그먼트가 다른 지역 대비 특징이 두드러짐',
     '가족 단위 방문 특성상 출산/육아 세그먼트도 일반 대비 크게 높게 나타남',
   ],
   overall: defaultVisitorProfile.interests!,
@@ -301,11 +342,11 @@ export const reportSections = [
 export const aiInsights = [
   {
     title: '홍보 효율성',
-    content: '수도권 2050 여성 타겟 클릭율이 18.2%로 전체 평균 대비 21% 높음. 유사 타겟 확대 권장.',
+    content: '광역권 2050 여성 타겟 클릭율이 18.2%로 전체 평균 대비 21% 높음. 유사 타겟 확대 권장.',
   },
   {
     title: '방문 패턴',
-    content: '수도권·인근 광역시 유입이 높고, 가족·연인 동반 방문 비중이 상대적으로 큼. 체류시간 1~3시간 구간이 가장 많음.',
+    content: '광역권·인근 도시 유입이 높고, 가족·연인 동반 방문 비중이 상대적으로 큼. 체류시간 1~3시간 구간이 가장 많음.',
   },
   {
     title: '개선 제안',
