@@ -1,21 +1,21 @@
 import { useCallback, useState } from 'react';
 import type { ReportFormat } from '../types/report';
-import type { PerformanceReportSlide } from '../reports/performanceReportSlides';
+import { buildStabilizedSlides } from '../reports/buildPerformanceReportDocument';
 
 interface UseReportExportOptions {
-  buildHtml: () => string;
-  buildPerformanceSlides?: () => PerformanceReportSlide[];
   filenameBase: string;
   title: string;
   landscape?: boolean;
+  /** 만족도 조사 등 세로 보고서용 */
+  buildHtml?: () => string;
 }
 
+/** 성과 보고서: 데이터 기반 Export · 만족도: HTML 기반 */
 export function useReportExport({
-  buildHtml,
-  buildPerformanceSlides,
   filenameBase,
   title,
   landscape = false,
+  buildHtml,
 }: UseReportExportOptions) {
   const [exporting, setExporting] = useState<ReportFormat | null>(null);
 
@@ -26,16 +26,33 @@ export function useReportExport({
       setExporting(format);
       try {
         const reportExport = await import('./reportExport');
+
+        if (landscape) {
+          const performanceSlides = buildStabilizedSlides();
+          await reportExport.exportReport(format, {
+            html: '',
+            filenameBase,
+            title,
+            slides: [],
+            landscape: true,
+            performanceSlides,
+          });
+          return;
+        }
+
+        if (!buildHtml) {
+          throw new Error('보고서 HTML 생성 함수가 필요합니다.');
+        }
+
         const html = buildHtml();
         const slides = reportExport.htmlToSlides(html, title);
-        const performanceSlides = buildPerformanceSlides?.();
+
         await reportExport.exportReport(format, {
           html,
           filenameBase,
           title,
           slides,
-          performanceSlides,
-          landscape,
+          landscape: false,
         });
       } catch (error) {
         const { buildExportErrorMessage } = await import('./reportExport');
@@ -44,8 +61,8 @@ export function useReportExport({
         setExporting(null);
       }
     },
-    [buildHtml, buildPerformanceSlides, exporting, filenameBase, landscape, title],
+    [buildHtml, exporting, filenameBase, landscape, title],
   );
 
-  return { exporting, handleExport };
+  return { exporting, handleExport, isPreviewReady: true };
 }

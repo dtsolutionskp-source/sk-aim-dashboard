@@ -30,7 +30,7 @@ export interface ReportChartSpec {
   type?: 'horizontal' | 'vertical' | 'donut' | 'line';
 }
 
-const DEFAULT_COLORS = ['#f47725', '#ff8c42', '#ffc078', '#ea002c', '#adb5bd', '#868e96', '#4e5968'];
+const DEFAULT_COLORS = ['#f47725', '#ea002c', '#ff8c42', '#ffc078', '#fff0e6', '#f47725'];
 
 function pickColor(item: ChartItem, idx: number): string {
   return item.color ?? DEFAULT_COLORS[idx % DEFAULT_COLORS.length];
@@ -56,7 +56,7 @@ export function renderHorizontalBarChart(chart: ReportChartSpec): string {
     .join('');
 
   return `
-    <div class="chart-panel">
+    <div class="chart-panel${chart.items.length >= 5 ? ' chart-panel--dense' : ''}">
       <p class="chart-panel-title">${escapeHtml(chart.title)}</p>
       <div class="hbar-chart">${rows}</div>
     </div>
@@ -247,6 +247,44 @@ export function renderInsightStrip(insights: string[], recommendations?: string[
     <div class="insight-strip">
       <span class="insight-strip-badge">분석·제언</span>
       <p class="insight-strip-text">${merged.map((l) => escapeHtml(l)).join('<span class="insight-sep">·</span>')}</p>
+    </div>
+  `;
+}
+
+/** 공공기관 제출용 — 핵심 발견·정책 제언 블록 */
+export function renderInsightPanel(
+  findings: string[],
+  recommendations?: string[],
+  opts?: { lead?: string; compact?: boolean },
+): string {
+  const hasFindings = findings.length > 0;
+  const hasRecs = (recommendations?.length ?? 0) > 0;
+  if (!hasFindings && !hasRecs && !opts?.lead) return '';
+
+  const list = (items: string[]) =>
+    `<ul class="insight-panel-list">${items.map((l) => `<li>${escapeHtml(l)}</li>`).join('')}</ul>`;
+
+  return `
+    <div class="insight-panel${opts?.compact ? ' insight-panel-compact' : ''}">
+      ${opts?.lead ? `<p class="insight-panel-lead">${escapeHtml(opts.lead)}</p>` : ''}
+      <div class="insight-panel-columns">
+        ${
+          hasFindings
+            ? `<div class="insight-panel-block insight-panel-findings">
+          <p class="insight-panel-heading">핵심 발견</p>
+          ${list(findings)}
+        </div>`
+            : ''
+        }
+        ${
+          hasRecs
+            ? `<div class="insight-panel-block insight-panel-recs">
+          <p class="insight-panel-heading">정책·운영 제언</p>
+          ${list(recommendations!)}
+        </div>`
+            : ''
+        }
+      </div>
     </div>
   `;
 }

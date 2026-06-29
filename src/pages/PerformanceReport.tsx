@@ -3,13 +3,10 @@ import { motion } from 'framer-motion';
 import { Download, FileText, CheckCircle2, Sparkles, Image } from 'lucide-react';
 import { PageHeader, PageContent } from '../components/Layout';
 import { Card } from '../components/ui';
-import ReportPreview from '../components/ReportPreview';
 import { festivalInfo, reportSections, aiInsights } from '../data/mockData';
-import {
-  buildPerformanceReportDocument,
-  buildPerformanceReportSlides,
-  PERFORMANCE_REPORT_FILENAME_BASE,
-} from '../reports/buildPerformanceReportDocument';
+import { PERFORMANCE_REPORT_FILENAME_BASE } from '../reports/buildPerformanceReportDocument';
+import { ReportRenderProvider } from '../reports/ReportRenderContext';
+import PerformanceReportLayoutPreview from '../components/PerformanceReportLayoutPreview';
 import { useReportExport } from '../utils/useReportExport';
 import type { ReportFormat } from '../types/report';
 
@@ -24,13 +21,19 @@ const attachImages = [
 ];
 
 export default function PerformanceReport() {
+  return (
+    <ReportRenderProvider>
+      <PerformanceReportPage />
+    </ReportRenderProvider>
+  );
+}
+
+function PerformanceReportPage() {
   const reportTitle = useMemo(
     () => `${festivalInfo.name} 성과 분석 보고서`,
     [],
   );
   const { exporting, handleExport } = useReportExport({
-    buildHtml: buildPerformanceReportDocument,
-    buildPerformanceSlides: buildPerformanceReportSlides,
     filenameBase: PERFORMANCE_REPORT_FILENAME_BASE,
     title: reportTitle,
     landscape: true,
@@ -73,27 +76,27 @@ export default function PerformanceReport() {
           {downloadFormats.map((dl, i) => {
             const isLoading = exporting === dl.format;
             return (
-            <motion.button
-              key={dl.format}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06 }}
-              whileHover={{ y: exporting ? 0 : -2 }}
-              whileTap={{ scale: exporting ? 1 : 0.98 }}
-              disabled={Boolean(exporting)}
-              onClick={() => handleExport(dl.format)}
-              className="group flex flex-col items-center gap-2 rounded-2xl border border-sk-gray-200/80 bg-white px-4 py-5 shadow-card transition-all hover:border-sk-orange/25 hover:shadow-card-hover disabled:cursor-wait disabled:opacity-60"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sk-gray-25 text-sk-gray-600 transition-colors group-hover:gradient-sk group-hover:text-white">
-                <Download className="h-4 w-4" />
-              </div>
-              <div className="text-center">
-                <p className="text-sm font-bold text-sk-gray-800">
-                  {isLoading ? '생성 중…' : dl.label}
-                </p>
-                <p className="text-[11px] text-sk-gray-400">{dl.sub}</p>
-              </div>
-            </motion.button>
+              <motion.button
+                key={dl.format}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.06 }}
+                whileHover={{ y: exporting ? 0 : -2 }}
+                whileTap={{ scale: exporting ? 1 : 0.98 }}
+                disabled={Boolean(exporting)}
+                onClick={() => handleExport(dl.format)}
+                className="group flex flex-col items-center gap-2 rounded-2xl border border-sk-gray-200/80 bg-white px-4 py-5 shadow-card transition-all hover:border-sk-orange/25 hover:shadow-card-hover disabled:cursor-wait disabled:opacity-50"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sk-gray-25 text-sk-gray-600 transition-colors group-hover:gradient-sk group-hover:text-white">
+                  <Download className="h-4 w-4" />
+                </div>
+                <div className="text-center">
+                  <p className="text-sm font-bold text-sk-gray-800">
+                    {isLoading ? '생성 중…' : dl.label}
+                  </p>
+                  <p className="text-[11px] text-sk-gray-400">{dl.sub}</p>
+                </div>
+              </motion.button>
             );
           })}
         </div>
@@ -135,13 +138,22 @@ export default function PerformanceReport() {
                   className="overflow-hidden rounded-xl border border-sk-gray-200/80 bg-white shadow-sm"
                 >
                   <div className="relative flex h-24 items-center justify-center bg-sk-gray-800">
-                    <div className="absolute inset-0 opacity-20" style={{
-                      backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255,255,255,0.03) 19px, rgba(255,255,255,0.03) 20px), repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255,255,255,0.03) 19px, rgba(255,255,255,0.03) 20px)',
-                    }} />
+                    <div
+                      className="absolute inset-0 opacity-20"
+                      style={{
+                        backgroundImage:
+                          'repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255,255,255,0.03) 19px, rgba(255,255,255,0.03) 20px), repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255,255,255,0.03) 19px, rgba(255,255,255,0.03) 20px)',
+                      }}
+                    />
                     {img.type === 'aerial' ? (
                       <div className="grid grid-cols-3 gap-1 p-3">
-                        {['A1','A2','A3','B1','B2','B3'].map((z) => (
-                          <div key={z} className="flex h-6 w-8 items-center justify-center rounded bg-sk-orange/40 text-[8px] font-bold text-white">{z}</div>
+                        {['A1', 'A2', 'A3', 'B1', 'B2', 'B3'].map((z) => (
+                          <div
+                            key={z}
+                            className="flex h-6 w-8 items-center justify-center rounded bg-sk-orange/40 text-[8px] font-bold text-white"
+                          >
+                            {z}
+                          </div>
                         ))}
                       </div>
                     ) : (
@@ -195,7 +207,7 @@ export default function PerformanceReport() {
             <FileText className="h-5 w-5 text-sk-orange" />
             <h3 className="text-base font-bold text-sk-gray-800">보고서 미리보기</h3>
           </div>
-          <ReportPreview />
+          <PerformanceReportLayoutPreview />
         </div>
       </PageContent>
     </>

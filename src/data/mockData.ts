@@ -108,8 +108,8 @@ export const promoMaterials: PromoMaterial[] = [
     stats: { sent: 85000, clicks: 10200 },
     schedule: { type: 'send', label: '발송일', period: '2025.09.25 ~ 2025.09.28' },
     pushRows: [
-      { media: 'SKT Push', sendDate: '9월 25일', sent: 45000, reach: 38500, clicks: 4620, clickRate: 12.0 },
-      { media: 'SKT Push', sendDate: '9월 28일', sent: 40000, reach: 34300, clicks: 5580, clickRate: 12.0 },
+      { media: 'OK캐쉬백', sendDate: '9월 25일', sent: 45000, reach: 38500, clicks: 4620, clickRate: 12.0 },
+      { media: 'OK캐쉬백', sendDate: '9월 28일', sent: 40000, reach: 34300, clicks: 5580, clickRate: 12.0 },
     ],
     kpis: [
       { label: '푸쉬 발송 수', value: 85000, unit: '건', change: 12, changeLabel: '전년 대비' },
@@ -130,8 +130,8 @@ export const promoMaterials: PromoMaterial[] = [
     stats: { sent: 40000, clicks: 4530 },
     schedule: { type: 'send', label: '발송일', period: '2025.10.02 ~ 2025.10.05' },
     pushRows: [
-      { media: 'SKT Push', sendDate: '10월 2일', sent: 20000, reach: 16800, clicks: 2260, clickRate: 11.3 },
-      { media: 'SKT Push', sendDate: '10월 4일', sent: 20000, reach: 16800, clicks: 2270, clickRate: 11.3 },
+      { media: 'OK캐쉬백', sendDate: '10월 2일', sent: 20000, reach: 16800, clicks: 2260, clickRate: 11.3 },
+      { media: 'OK캐쉬백', sendDate: '10월 4일', sent: 20000, reach: 16800, clicks: 2270, clickRate: 11.3 },
     ],
     kpis: [
       { label: '푸쉬 발송 수', value: 40000, unit: '건', change: 8, changeLabel: '전년 대비' },
@@ -148,14 +148,14 @@ export const promoMaterials: PromoMaterial[] = [
     id: 'main-banner',
     title: '메인 배너',
     reportHeading: '앱 노출 진행',
-    description: 'T map · O2 앱 내 축제 홍보 배너 노출',
+    description: 'OK캐쉬백 앱 내 축제 홍보 배너 노출',
     stats: { sent: 0, clicks: 42800, impressions: 892000 },
     schedule: { type: 'exposure', label: '노출 기간', period: '2025.09.20 ~ 2025.10.10' },
     bannerRows: [
-      { media: 'T map', period: '9/20~10/10', placement: '라이프스타일 배너', impressions: 185420, clicks: 3048, clickRate: 1.64 },
-      { media: 'T map', period: '9/20~10/10', placement: '이벤트 배너', impressions: 96840, clicks: 2342, clickRate: 2.42 },
-      { media: 'O2', period: '9/20~10/10', placement: '메인 상단 DA', impressions: 312680, clicks: 17824, clickRate: 5.7 },
-      { media: 'O2', period: '9/20~10/10', placement: '모바일 전단지', impressions: 297060, clicks: 19586, clickRate: 6.6 },
+      { media: 'OK캐쉬백', period: '9/20~10/10', placement: '라이프스타일 배너', impressions: 185420, clicks: 3048, clickRate: 1.64 },
+      { media: 'OK캐쉬백', period: '9/20~10/10', placement: '이벤트 배너', impressions: 96840, clicks: 2342, clickRate: 2.42 },
+      { media: 'OK캐쉬백', period: '9/20~10/10', placement: '메인 상단 DA', impressions: 312680, clicks: 17824, clickRate: 5.7 },
+      { media: 'OK캐쉬백', period: '9/20~10/10', placement: '모바일 전단지', impressions: 297060, clicks: 19586, clickRate: 6.6 },
     ],
     kpis: [
       { label: '노출수', value: 892000, unit: '건', change: 32, changeLabel: '전년 대비' },
@@ -328,15 +328,15 @@ export const aiSummary = [
 ];
 
 export const reportSections = [
-  { id: 'overview', title: '행사 개요', status: 'complete' },
-  { id: 'marketing', title: '홍보 성과', status: 'complete' },
-  { id: 'visitors', title: '방문객 분석', status: 'complete' },
+  { id: 'executive', title: 'Executive Summary', status: 'complete' },
+  { id: 'marketing', title: '마케팅 성과', status: 'complete' },
+  { id: 'profile', title: '방문객 프로파일', status: 'complete' },
   { id: 'inflow', title: '유입지역 분석', status: 'complete' },
-  { id: 'stay', title: '체류시간 분석', status: 'complete' },
-  { id: 'movement', title: '방문 전/후 이동 분석', status: 'complete' },
-  { id: 'survey', title: '만족도 조사', status: 'complete' },
-  { id: 'ai', title: 'AI 인사이트', status: 'complete' },
-  { id: 'improvement', title: '개선 제안', status: 'complete' },
+  { id: 'stay', title: '체류·이동 분석', status: 'complete' },
+  { id: 'cross', title: '지역별 교차분석', status: 'complete' },
+  { id: 'satisfaction', title: '만족도·주요 의견', status: 'complete' },
+  { id: 'economic', title: '경제효과·재방문', status: 'complete' },
+  { id: 'ai', title: 'AI 종합 제언', status: 'complete' },
 ];
 
 export const aiInsights = [
